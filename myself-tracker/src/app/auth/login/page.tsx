@@ -1,15 +1,31 @@
+// src/app/auth/login/page.tsx
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login with", email);
+    setErrorMsg("");
+    setSubmitting(true);
+    try {
+      await signIn(email, password);
+      router.push("/dashboard");
+    } catch (err: any) {
+      setErrorMsg(err?.message || "Failed to sign in");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -37,16 +53,24 @@ export default function LoginPage() {
               className="mt-1 w-full rounded-lg bg-slate-950 border border-slate-700 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-teal"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              minLength={6}
               required
             />
           </div>
         </div>
+
+        {errorMsg && (
+          <p className="text-xs text-red-400 text-center">{errorMsg}</p>
+        )}
+
         <button
           type="submit"
-          className="w-full rounded-full bg-brand-teal py-2.5 text-sm font-medium hover:bg-emerald-500 transition"
+          disabled={submitting}
+          className="w-full rounded-full bg-brand-teal py-2.5 text-sm font-medium hover:bg-emerald-500 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Sign in
+          {submitting ? "Signing in..." : "Sign in"}
         </button>
+
         <p className="text-xs text-slate-400 text-center">
           New here?{" "}
           <Link href="/auth/register" className="text-brand-teal underline">
