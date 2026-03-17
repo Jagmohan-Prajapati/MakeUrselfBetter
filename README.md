@@ -1,11 +1,3 @@
----END---
-
-***
-
-## README 3 — `MakeUrselfBetter`
-
----START---
-```markdown
 # MakeUrselfBetter
 
 Full-stack self-improvement tracker with daily activity logging, habit management, goal-setting, and productivity scoring. Helps users define goals, set deadlines, and track progress across multiple life aspects.
