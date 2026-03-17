@@ -22,7 +22,7 @@ graph TD
     Progress --> UI
 ```
 
-Tech Stack
+## Tech Stack
 | Layer    | Technology              |
 | -------- | ----------------------- |
 | Language | TypeScript              |
